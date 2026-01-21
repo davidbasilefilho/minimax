@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "bun",
+      "args": [
+        "x",
+        "context7-mcp-server"
+      ],
+      "type": "stdio"
+    }
+  }
+}
