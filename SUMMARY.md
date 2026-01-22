@@ -9,14 +9,15 @@ A TanStack React Router application with a custom brutalist design system.
 - **Styling**: Tailwind CSS v4
 - **State**: TanStack Store
 - **Linting/Formatting**: Biome
+- **React**: 19.2 with Compiler enabled
 
 ## Design System
 
 This project implements a custom brutalist design system with:
 
-- **Colors**: Void, concrete, acid green (#ccff00), electric, neon
+- **Colors**: Void, concrete, minimax-pink (#d23f6c), minimax-red (#e2535b), electric, neon
 - **Typography**: Space Mono (headings), Work Sans (body)
-- **Principles**: Sharp corners, thick borders, high contrast, monospace headings, acid green accents
+- **Principles**: Sharp corners, thick borders, high contrast, monospace headings, minimax-pink/red accents
 
 ### Components
 
@@ -52,7 +53,7 @@ This is a TanStack React Router application (`minimax-demo`) with file-based rou
    - `src/components/Section/Section.tsx` - Layout section with grid pattern, scanlines, vignette
 
 2. **Created Tailwind CSS v4 Theme** (`src/styles.css`)
-   - Color palette: void, concrete, acid (#ccff00), electric, neon, semantic colors
+   - Color palette: void, concrete, minimax-pink (#d23f6c), minimax-red (#e2535b), electric, neon, semantic colors
    - Typography: Space Mono + Work Sans
    - Sharp borders, scanlines, glitch animations, hover effects
 
@@ -97,7 +98,10 @@ src/
 
 - Build passes successfully (`bun run build` completes)
 - All components use `cn()` from `@/lib/cn` instead of `clsx`
-- Remaining issues are pre-existing (Header.tsx route type errors)
+- Biome check passes with no errors
+- Demo files and routes removed
+- Header simplified with no dead code
+- Fixed accessibility issues (button types, semantic elements, unique IDs)
 
 ## Next Steps (Frontend Aesthetics Guidelines)
 

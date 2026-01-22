@@ -15,6 +15,35 @@ Proactive Context: Always verify the latest API usage and breaking changes for t
 ## Modern Tooling Stack
 Adopt modern, high-performance tooling by default. Refrain from using legacy equivalents unless explicitly requested.
 
+### React 19.2 and Compiler
+This project uses React 19.2 with the React Compiler enabled. The compiler automates granular memoization, so manual optimization patterns are unnecessary and forbidden.
+
+**DO NOT use:**
+- `React.memo()` or `.memo` HOC
+- `useMemo()` for value memoization
+- `useCallback()` for function memoization
+- Manual dependency arrays in `useEffect`/`useCallback`/`useMemo` (rely on compiler)
+- The `{condition && (component)}` conditional rendering pattern
+
+**USE React 19.2 patterns:**
+- `<Activity mode={condition ? 'visible' : 'hidden'}>` instead of `{condition && <Component />}` for conditional rendering with state preservation
+- `<Context value={...}>` directly as a provider instead of `<Context.Provider>`
+- Pass `ref` directly as a prop in function components (no `forwardRef` needed)
+- `use()` API for reading context or promises conditionally in render
+- Write idiomatic React code; let the compiler handle optimization
+
+Example conversion:
+```tsx
+// Before (forbidden)
+{isVisible && <Sidebar />}
+
+// After (required)
+import { Activity } from 'react';
+<Activity mode={isVisible ? 'visible' : 'hidden'}>
+  <Sidebar />
+</Activity>
+```
+
 ### JavaScript and TypeScript Ecosystem
 Language and Paradigm: Use TypeScript exclusively; never write plain JavaScript. Avoid OOP patterns (classes, inheritance) in favor of plain objects, functions, and composition.
 Runtime and Execution: Use bun for the runtime and bun x --bun for package execution. Use Bun Shell ($) for shell commands instead of Node.js child process methods.
@@ -25,7 +54,7 @@ Tooling: Use biome for linting and formatting. Run biome check --write before co
 ### CSS and Styling
 Use Tailwind CSS v4 with the @theme directive. Define all design tokens (colors, typography, spacing, animations) in src/styles.css using the @theme block.
 Use the design system components from src/components/ for consistent brutalist styling. The design system includes Button, Card, Input, Typography, Preloader, Marquee, CustomCursor, ScrollProgress, and Section components.
-Brutalist design principles: sharp corners (no border-radius), thick borders, high contrast colors, acid green (#ccff00) accents, monospace typography for headings.
+Brutalist design principles: sharp corners (no border-radius), thick borders, high contrast colors, minimax-pink (#d23f6c) and minimax-red (#e2535b) accents, monospace typography for headings.
 
 ### TanStack Router
 Routes are file-based and located in src/routes/. Each file automatically becomes a route based on its filename. The __root.tsx file defines the root layout with outlet for child routes.
@@ -52,7 +81,7 @@ src/hooks/ - Custom React hooks
 Produce code that is minimal, readable, and performant.
 
 ### Documentation and Readability
-Self-Documenting Logic: Do not use comments unless the logic is inherently cryptographic or mathematically obscure. Rely on descriptive variable and function naming.
+Self-Documenting Logic: Do not use comments (in both TS and TSX syntax, no //, /* */ or {/* */} comments) unless the logic is inherently cryptographic or mathematically obscure. Rely on descriptive variable and function naming.
 No Magic Numbers: Define constants for all numeric or string literals. Logic must reference these identifiers rather than raw values.
 
 ### Tailwind CSS Class Merging
@@ -83,4 +112,4 @@ Lint code: bun run lint
 Check all: bun run check
 
 ## Project Context
-This is a TanStack React Router application with file-based routing. It uses Tailwind CSS v4 for styling and includes a custom brutalist design system with acid green (#ccff00) accents, sharp borders, and monospace typography. The project uses tanstack store for state management and tanstack query for data fetching.
+This is a TanStack React Router application with file-based routing. It uses Tailwind CSS v4 for styling and includes a custom brutalist design system with minimax-pink (#d23f6c) and minimax-red (#e2535b) accents, sharp borders, and monospace typography. The project uses React 19.2 with the compiler enabled and tanstack store for state management.

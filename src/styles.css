@@ -1,41 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
-  /* Color Palette - Brutalist */
-  --color-void: #0a0a0a;
-  --color-concrete: #1a1a1a;
-  --color-dark: #0d0d0d;
-  --color-white: #f0f0f0;
-  --color-muted: #888888;
-  --color-dim: #555555;
-  --color-acid: #ccff00;
-  --color-electric: #00ff88;
-  --color-neon: #ff00ff;
-  --color-grid: #2a2a2a;
+  /* Color Palette - Bold Brutalist */
+  --color-void: #050505;
+  --color-dark: #0a0a0a;
+  --color-concrete: #141414;
+  --color-surface: #1c1c1c;
+  --color-grid: #252525;
   --color-light: #3a3a3a;
-  --color-accent: #ccff00;
+
+  /* Primary - Hot Pink */
+  --color-primary: #ff2a6d;
+  --color-primary-dim: #d61a52;
+  --color-primary-glow: rgba(255, 42, 109, 0.3);
+
+  /* Secondary - Electric Blue */
+  --color-secondary: #05d9e8;
+  --color-secondary-dim: #05a8c4;
+
+  /* Accents - Acid & Neon */
+  --color-acid: #ccff00;
+  --color-neon: #ff00ff;
+  --color-amber: #ff9500;
+  --color-lime: #a3e635;
+
+  /* Semantic */
   --color-success: #00ff88;
   --color-warning: #ffcc00;
-  --color-error: #ff3333;
-  --color-info: #00aaff;
-  --color-hover: #ddff11;
-  --color-focus: #ffffff;
-  --color-active: #aaaa00;
+  --color-error: #ff3366;
+  --color-info: #00d4ff;
 
-  /* Font Family */
-  --font-mono: "Space Mono", "Courier New", monospace;
-  --font-sans: "Work Sans", "Inter", sans-serif;
+  /* Typography Colors */
+  --color-white: #fafafa;
+  --color-white-dim: #e5e5e5;
+  --color-muted: #888888;
+  --color-dim: #555555;
+
+  /* Font Family - Distinctive Choices */
+  --font-display: "Syne", sans-serif;
+  --font-mono: "Space Grotesk", "JetBrains Mono", monospace;
+  --font-sans: "Space Grotesk", sans-serif;
 
   /* Font Size */
-  --text-xs: 12px;
-  --text-sm: 14px;
-  --text-base: 16px;
-  --text-lg: 18px;
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-lg: 17px;
   --text-xl: 20px;
-  --text-2xl: 24px;
-  --text-3xl: 32px;
+  --text-2xl: 26px;
+  --text-3xl: 36px;
   --text-4xl: 48px;
-  --text-5xl: 64px;
+  --text-5xl: 72px;
+  --text-6xl: 96px;
 
   /* Spacing */
   --spacing-0: 0px;
@@ -59,45 +76,71 @@
   --border-width-3: 3px;
   --border-width-4: 4px;
 
-  /* Border Radius - Brutalist means sharp corners */
+  /* Border Radius - Brutalist means sharp */
   --radius-none: 0px;
   --radius-sm: 2px;
   --radius-base: 4px;
   --radius-lg: 8px;
 
   /* Animation */
+  --animate-glitch-1: glitch-1 500ms ease-in-out;
+  --animate-glitch-2: glitch-2 500ms ease-in-out 100ms;
+  --animate-glitch-mount: glitch-mount 500ms ease-out forwards;
   --animate-scanline: scanline 8s linear infinite;
-  --animate-glitch: glitch 300ms ease-in-out;
   --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-fade-in: fade-in 300ms ease-out;
   --animate-fade-out: fade-out 300ms ease-in;
   --animate-marquee: marquee 20s linear infinite;
   --animate-marquee-reverse: marquee-reverse 20s linear infinite;
-  --animate-pause: animation-play-state paused;
+  --animate-shake: shake 400ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  --animate-shrink: shrink 3s linear forwards;
+  --animate-toast-enter: toast-enter 0.3s ease-out forwards;
+  --animate-toast-exit: toast-exit 0.2s ease-in forwards;
+
+  /* Transitions */
+  --duration-200: 200ms;
+  --duration-300: 300ms;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
 
   /* Keyframes */
+  @keyframes glitch-1 {
+    0% { opacity: 1; transform: translate(0); clip-path: inset(0 0 0 0); filter: hue-rotate(0deg); }
+    20% { opacity: 1; transform: translate(-3px, 3px); clip-path: inset(10% 0 60% 0); filter: hue-rotate(90deg); }
+    40% { opacity: 1; transform: translate(3px, -3px); clip-path: inset(50% 0 20% 0); filter: hue-rotate(180deg); }
+    60% { opacity: 1; transform: translate(-3px, 0); clip-path: inset(20% 0 70% 0); filter: hue-rotate(270deg); }
+    80% { opacity: 1; transform: translate(3px, 3px); clip-path: inset(80% 0 5% 0); filter: hue-rotate(360deg); }
+    100% { opacity: 0; transform: translate(0); clip-path: inset(0 0 0 0); filter: hue-rotate(0deg); }
+  }
+
+  @keyframes glitch-2 {
+    0% { opacity: 1; transform: translate(0); clip-path: inset(0 0 0 0); }
+    20% { opacity: 1; transform: translate(3px, -3px); clip-path: inset(5% 0 70% 0); }
+    40% { opacity: 1; transform: translate(-3px, 3px); clip-path: inset(60% 0 15% 0); }
+    60% { opacity: 1; transform: translate(3px, 3px); clip-path: inset(15% 0 50% 0); }
+    80% { opacity: 1; transform: translate(-3px, -3px); clip-path: inset(70% 0 10% 0); }
+    100% { opacity: 0; transform: translate(0); clip-path: inset(0 0 0 0); }
+  }
+
   @keyframes scanline {
     0% { transform: translateY(-100%); }
     100% { transform: translateY(100vh); }
   }
 
-  @keyframes glitch {
-    0% { transform: translate(0); }
-    20% { transform: translate(-2px, 2px); }
-    40% { transform: translate(2px, -2px); }
-    60% { transform: translate(-2px, -2px); }
-    80% { transform: translate(2px, 2px); }
-    100% { transform: translate(0); }
+  @keyframes shake {
+    10%, 90% { transform: translate3d(-2px, 0, 0); }
+    20%, 80% { transform: translate3d(4px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+    40%, 60% { transform: translate3d(8px, 0, 0); }
   }
 
   @keyframes fade-in {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes fade-out {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
   }
 
   @keyframes marquee {
@@ -110,21 +153,81 @@
     100% { transform: translateX(0); }
   }
 
-  /* Transition Duration */
-  --duration-75: 75ms;
-  --duration-100: 100ms;
-  --duration-150: 150ms;
-  --duration-200: 200ms;
-  --duration-300: 300ms;
-  --duration-500: 500ms;
-  --duration-700: 700ms;
-  --duration-1000: 1000ms;
+  @keyframes shrink {
+    from { width: 100%; }
+    to { width: 0%; }
+  }
 
-  /* Transition Timing Function */
-  --ease-out: ease-out;
-  --ease-in: ease-in;
-  --ease-in-out: ease-in-out;
-  --ease-linear: linear;
+  @keyframes toast-progress {
+    from { width: 100%; }
+    to { width: 0%; }
+  }
+
+  @keyframes toast-enter {
+    0% {
+      opacity: 0;
+      transform: scale(0.9) translateY(-10px);
+    }
+    50% {
+      transform: scale(1.02, 0.95) translateY(2px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes toast-exit {
+    0% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.95, 1.05) translateY(-10px);
+    }
+  }
+
+  @keyframes glitch-mount {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    30% { opacity: 0; }
+    50% { opacity: 1; }
+    70% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+}
+
+/* Glitch Card Styles */
+.glitch-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.glitch-layer-1,
+.glitch-layer-2 {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.glitch-layer-1 {
+  background: rgba(204, 255, 0, 0.15);
+}
+
+.glitch-layer-2 {
+  background: rgba(5, 217, 232, 0.15);
+}
+
+.animate-glitch-1 {
+  animation: glitch-1 500ms ease-in-out;
+}
+
+.animate-glitch-2 {
+  animation: glitch-2 500ms ease-in-out 100ms;
+}
+  animation: glitch-2 500ms ease-in-out 100ms;
 }
 
 /* Base Reset */
@@ -144,7 +247,7 @@ body {
   font-family: var(--font-sans);
   background-color: var(--color-void);
   color: var(--color-white);
-  line-height: 1.5;
+  line-height: 1.6;
   min-height: 100vh;
 }
 
@@ -154,31 +257,39 @@ body {
     border: var(--border-width-2) solid var(--color-light);
   }
 
-  .brutal-border-accent {
-    border: var(--border-width-2) solid var(--color-acid);
+  .brutal-border-primary {
+    border: var(--border-width-2) solid var(--color-primary);
+  }
+
+  .brutal-border-secondary {
+    border: var(--border-width-2) solid var(--color-secondary);
   }
 
   .brutal-shadow {
-    box-shadow: 4px 4px 0 var(--color-grid);
+    box-shadow: 6px 6px 0 var(--color-grid);
   }
 
-  .brutal-shadow-accent {
-    box-shadow: 4px 4px 0 var(--color-acid);
+  .brutal-shadow-primary {
+    box-shadow: 6px 6px 0 var(--color-primary);
+  }
+
+  .brutal-shadow-secondary {
+    box-shadow: 6px 6px 0 var(--color-secondary);
   }
 
   .brutal-hover {
-    transition: all var(--duration-300) var(--ease-out);
+    transition: all var(--duration-200) var(--ease-out);
   }
 
   .brutal-hover:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 var(--color-acid);
+    transform: translate(-3px, -3px);
+    box-shadow: 8px 8px 0 var(--color-primary);
   }
 
   .brutal-text {
     font-family: var(--font-mono);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
   }
 
   .scanlines {
@@ -195,9 +306,9 @@ body {
     background: repeating-linear-gradient(
       0deg,
       transparent,
-      transparent 4px,
-      rgba(0, 0, 0, 0.03) 4px,
-      rgba(0, 0, 0, 0.03) 5px
+      transparent 3px,
+      rgba(0, 0, 0, 0.08) 3px,
+      rgba(0, 0, 0, 0.08) 4px
     );
     pointer-events: none;
     z-index: 1000;
@@ -217,9 +328,31 @@ body {
     background: radial-gradient(
       ellipse at center,
       transparent 0%,
-      rgba(0, 0, 0, 0.4) 100%
+      rgba(0, 0, 0, 0.5) 100%
     );
     pointer-events: none;
     z-index: 1000;
+  }
+
+  .text-gradient-primary {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-neon) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-secondary {
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-info) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 30px var(--color-primary-glow), 0 0 60px var(--color-primary-glow);
+  }
+
+  .glow-secondary {
+    box-shadow: 0 0 30px rgba(5, 217, 232, 0.3), 0 0 60px rgba(5, 217, 232, 0.2);
   }
 }

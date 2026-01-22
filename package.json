@@ -9,11 +9,12 @@
     "test": "vitest run",
     "format": "biome format --write",
     "lint": "biome lint --write",
-    "check": "biome check --write"
+    "check": "biome check --write",
+    "tsr:generate": "tsr generate",
+    "tsr:watch": "tsr watch"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",
-    "@faker-js/faker": "^10.2.0",
     "@t3-oss/env-core": "^0.13.10",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/match-sorter-utils": "^8.19.4",
@@ -25,9 +26,12 @@
     "@tanstack/react-router-devtools": "^1.154.1",
     "@tanstack/react-store": "^0.7.7",
     "@tanstack/react-table": "^8.21.3",
+    "@tanstack/router-cli": "^1.154.7",
     "@tanstack/router-plugin": "^1.154.1",
     "@tanstack/store": "^0.7.7",
+    "arktype": "^2.1.29",
     "lucide-react": "^0.545.0",
+    "motion": "^12.29.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "rolldown-vite": "^7.3.1",

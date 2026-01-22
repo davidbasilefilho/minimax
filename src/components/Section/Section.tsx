@@ -1,16 +1,11 @@
-import * as React from "react";
+import type * as React from "react";
 import { cn } from "@/lib/cn";
 
 export interface SectionProps extends React.HTMLAttributes<HTMLDivElement> {
-	/** Section size preset */
 	size?: "sm" | "md" | "lg" | "xl" | "full";
-	/** Whether to apply the brutalist grid pattern background */
 	gridPattern?: boolean;
-	/** Whether to apply scanlines effect */
 	scanlines?: boolean;
-	/** Whether to apply vignette effect */
 	vignette?: boolean;
-	/** Section ID for navigation */
 	id?: string;
 }
 
@@ -22,39 +17,33 @@ const sectionSizes = {
 	full: "min-h-screen py-0 px-0",
 };
 
-export const Section = React.forwardRef<HTMLDivElement, SectionProps>(
-	(
-		{
-			size = "md",
-			gridPattern = false,
-			scanlines = false,
-			vignette = false,
-			id,
-			className,
-			children,
-			...props
-		},
-		forwardedRef,
-	) => {
-		return (
-			<section
-				ref={forwardedRef}
-				id={id}
-				className={cn(
-					"relative w-full",
-					sectionSizes[size],
-					gridPattern && "bg-grid bg-[length:40px_40px]",
-					scanlines && "scanlines",
-					vignette && "vignette",
-					className,
-				)}
-				{...props}
-			>
-				{children}
-			</section>
-		);
-	},
-);
+export function Section({
+	size = "md",
+	gridPattern = false,
+	scanlines = false,
+	vignette = false,
+	id,
+	className,
+	children,
+	...props
+}: SectionProps) {
+	return (
+		<section
+			id={id}
+			className={cn(
+				"relative w-full",
+				sectionSizes[size],
+				gridPattern && "bg-grid bg-[length:40px_40px]",
+				scanlines && "scanlines",
+				vignette && "vignette",
+				className,
+			)}
+			{...props}
+		>
+			{children}
+		</section>
+	);
+}
 
 Section.displayName = "Section";
 

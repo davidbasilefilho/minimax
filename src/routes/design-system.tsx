@@ -1,5 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, Github, Zap } from "lucide-react";
+import type { ColumnDef } from "@tanstack/react-table";
+import {
+	ArrowRight,
+	ArrowUpRight,
+	Calendar,
+	Github,
+	Mail,
+	Trash2,
+	Zap,
+} from "lucide-react";
 import * as React from "react";
 import {
 	Button,
@@ -11,6 +20,10 @@ import {
 	CardHeader,
 	CardTitle,
 	Code,
+	DataTable,
+	Form,
+	FormField,
+	FormSelect,
 	Heading,
 	Input,
 	Kbd,
@@ -18,24 +31,187 @@ import {
 	Preloader,
 	Section,
 	Text,
+	useToastManager,
 } from "@/components";
 
 export const Route = createFileRoute("/design-system")({
 	component: DesignSystem,
 });
 
+interface User {
+	id: number;
+	name: string;
+	email: string;
+	role: string;
+	status: "active" | "inactive";
+}
+
+const userColumns: ColumnDef<User>[] = [
+	{
+		accessorKey: "id",
+		header: "ID",
+		cell: (info) => (
+			<Text className="font-mono">#{info.getValue() as number}</Text>
+		),
+	},
+	{
+		accessorKey: "name",
+		header: "Name",
+		cell: (info) => <Text bold>{info.getValue() as string}</Text>,
+	},
+	{
+		accessorKey: "email",
+		header: "Email",
+		cell: (info) => (
+			<Text variant="muted" size="sm">
+				{info.getValue() as string}
+			</Text>
+		),
+	},
+	{
+		accessorKey: "role",
+		header: "Role",
+		cell: (info) => <Kbd size="sm">{info.getValue() as string}</Kbd>,
+	},
+	{
+		accessorKey: "status",
+		header: "Status",
+		cell: (info) => {
+			const status = info.getValue() as string;
+			return (
+				<Text
+					size="sm"
+					className={status === "active" ? "text-success" : "text-dim"}
+				>
+					{status.toUpperCase()}
+				</Text>
+			);
+		},
+	},
+];
+
+const sampleUsers: User[] = [
+	{
+		id: 1,
+		name: "Alex Chen",
+		email: "alex@minimax.io",
+		role: "Admin",
+		status: "active",
+	},
+	{
+		id: 2,
+		name: "Sarah Miller",
+		email: "sarah@minimax.io",
+		role: "Editor",
+		status: "active",
+	},
+	{
+		id: 3,
+		name: "James Wilson",
+		email: "james@minimax.io",
+		role: "Viewer",
+		status: "inactive",
+	},
+	{
+		id: 4,
+		name: "Emily Davis",
+		email: "emily@minimax.io",
+		role: "Admin",
+		status: "active",
+	},
+	{
+		id: 5,
+		name: "Michael Brown",
+		email: "michael@minimax.io",
+		role: "Editor",
+		status: "active",
+	},
+];
+
+function ToastDemo() {
+	const toastManager = useToastManager();
+
+	const showToast = (type: "success" | "error" | "info" | "warning") => {
+		const config = {
+			success: {
+				type: "success",
+				title: "Operation Successful",
+				description: "Your changes have been saved to the system.",
+			},
+			error: {
+				type: "error",
+				title: "Error Detected",
+				description: "Something went wrong. Please try again.",
+			},
+			info: {
+				type: "info",
+				title: "System Update",
+				description: "New features are now available.",
+			},
+			warning: {
+				type: "warning",
+				title: "Warning",
+				description: "Please review before proceeding.",
+			},
+		};
+
+		toastManager.add(config[type]);
+	};
+
+	return (
+		<Card>
+			<CardHeader>
+				<CardTitle>Toast Notifications</CardTitle>
+				<CardDescription>
+					Non-blocking notifications with progress indicators
+				</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<div className="flex flex-wrap gap-3">
+					<Button variant="primary" onClick={() => showToast("success")}>
+						Success
+					</Button>
+					<Button variant="secondary" onClick={() => showToast("error")}>
+						Error
+					</Button>
+					<Button variant="outline" onClick={() => showToast("info")}>
+						Info
+					</Button>
+					<Button variant="ghost" onClick={() => showToast("warning")}>
+						Warning
+					</Button>
+				</div>
+			</CardContent>
+		</Card>
+	);
+}
+
 function DesignSystem() {
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
 
+	const typographyId = React.useId();
+	const buttonsId = React.useId();
+	const inputsId = React.useId();
+	const cardsId = React.useId();
+	const formsId = React.useId();
+	const tablesId = React.useId();
+	const toastsId = React.useId();
+	const visualId = React.useId();
+	const colorsId = React.useId();
+
+	const handleFormSubmit = async (values: Record<string, unknown>) => {
+		console.log("Form submitted:", values);
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+	};
+
 	return (
-		<div className="min-h-screen bg-void">
-			{/* Header */}
-			<header className="border-b-2 border-light bg-concrete sticky top-0 z-50">
+		<div className="min-h-screen bg-void scanlines">
+			<header className="border-b-2 border-light bg-surface sticky top-0 z-50">
 				<div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 					<div className="flex items-center gap-3">
-						<div className="w-8 h-8 bg-acid flex items-center justify-center">
-							<Zap className="w-5 h-5 text-void" />
+						<div className="w-10 h-10 bg-primary flex items-center justify-center">
+							<Zap className="w-6 h-6 text-white" />
 						</div>
 						<Heading level={1} size="lg" variant="mono">
 							Design System
@@ -46,7 +222,7 @@ function DesignSystem() {
 							href="https://github.com"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="text-muted hover:text-white transition-colors"
+							className="text-muted hover:text-primary transition-colors"
 						>
 							<Github className="w-5 h-5" />
 						</a>
@@ -55,14 +231,14 @@ function DesignSystem() {
 			</header>
 
 			<main className="max-w-7xl mx-auto px-6 py-8">
-				{/* Typography Section */}
-				<Section id="typography" size="lg" gridPattern>
-					<Heading level={2} size="4xl" accent className="mb-8">
+				<Section id={typographyId} size="lg" gridPattern>
+					<Heading level={2} size="4xl" className="mb-8">
 						Typography
 					</Heading>
-					<Text variant="muted" className="mb-6">
-						A bold, brutalist typography system using Space Mono for headings
-						and Work Sans for body text.
+					<Text variant="muted" className="mb-6 max-w-2xl">
+						Distinctive type system using Space Grotesk for headings and
+						monospace for technical text. Bold, brutalist, and unmistakably
+						modern.
 					</Text>
 
 					<div className="grid gap-6 md:grid-cols-2">
@@ -70,7 +246,7 @@ function DesignSystem() {
 							<CardHeader>
 								<CardTitle>Headings</CardTitle>
 								<CardDescription>
-									Available in 9 sizes with mono and uppercase variants
+									Space Grotesk in multiple weights
 								</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-4">
@@ -103,9 +279,9 @@ function DesignSystem() {
 
 						<Card>
 							<CardHeader>
-								<CardTitle>Text Variants</CardTitle>
+								<CardTitle>Text Styles</CardTitle>
 								<CardDescription>
-									Multiple text styles for different contexts
+									Monospace for all text elements
 								</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-4">
@@ -120,10 +296,12 @@ function DesignSystem() {
 									</Text>
 								</div>
 								<div>
-									<Text variant="dim">Dim text for tertiary content</Text>
+									<Text variant="dim">Dim text for tertiary</Text>
 								</div>
 								<div>
-									<Text variant="accent">Accent text for emphasis</Text>
+									<Text variant="accent" className="text-primary">
+										Accent text for emphasis
+									</Text>
 								</div>
 								<div className="flex gap-2 items-center">
 									<Kbd size="sm">Ctrl</Kbd>
@@ -138,14 +316,13 @@ function DesignSystem() {
 					</div>
 				</Section>
 
-				{/* Buttons Section */}
-				<Section id="buttons" size="lg">
+				<Section id={buttonsId} size="lg">
 					<Heading level={2} size="3xl" className="mb-8">
 						Buttons
 					</Heading>
-					<Text variant="muted" className="mb-6">
-						Brutalist buttons with uppercase text, thick borders, and acid green
-						hover states.
+					<Text variant="muted" className="mb-6 max-w-2xl">
+						High-contrast buttons with sharp edges and bold hover states. No
+						rounded corners, no subtlety.
 					</Text>
 
 					<Card className="mb-6">
@@ -153,7 +330,7 @@ function DesignSystem() {
 							<CardTitle>Variants</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<div className="flex flex-wrap gap-4">
+							<div className="flex flex-wrap gap-3">
 								<Button variant="primary">Primary</Button>
 								<Button variant="secondary">Secondary</Button>
 								<Button variant="outline">Outline</Button>
@@ -167,7 +344,7 @@ function DesignSystem() {
 							<CardTitle>Sizes</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<div className="flex flex-wrap gap-4 items-center">
+							<div className="flex flex-wrap gap-3 items-center">
 								<Button size="sm">Small</Button>
 								<Button size="md">Medium</Button>
 								<Button size="lg">Large</Button>
@@ -180,7 +357,7 @@ function DesignSystem() {
 							<CardTitle>With Icons</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<div className="flex flex-wrap gap-4">
+							<div className="flex flex-wrap gap-3">
 								<Button startIcon={<ArrowRight className="w-4 h-4" />}>
 									Get Started
 								</Button>
@@ -190,7 +367,13 @@ function DesignSystem() {
 								>
 									Learn More
 								</Button>
-								<Button loading>Loading...</Button>
+								<Button
+									variant="secondary"
+									endIcon={<ArrowUpRight className="w-4 h-4" />}
+								>
+									View Docs
+								</Button>
+								<Button loading>Processing...</Button>
 							</div>
 						</CardContent>
 					</Card>
@@ -200,22 +383,22 @@ function DesignSystem() {
 							<CardTitle>States</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<div className="flex flex-wrap gap-4">
+							<div className="flex flex-wrap gap-3">
 								<Button>Default</Button>
 								<Button disabled>Disabled</Button>
-								<Button fullWidth>Full Width</Button>
+								<Button fullWidth>Full Width Button</Button>
 							</div>
 						</CardContent>
 					</Card>
 				</Section>
 
-				{/* Inputs Section */}
-				<Section id="inputs" size="lg" gridPattern>
+				<Section id={inputsId} size="lg" gridPattern>
 					<Heading level={2} size="3xl" className="mb-8">
 						Inputs
 					</Heading>
-					<Text variant="muted" className="mb-6">
-						Accessible form inputs with validation states and icon support.
+					<Text variant="muted" className="mb-6 max-w-2xl">
+						Sharp-edged inputs with bold focus states. No border radius, no soft
+						shadows.
 					</Text>
 
 					<Card>
@@ -229,7 +412,7 @@ function DesignSystem() {
 									placeholder="you@example.com"
 									value={email}
 									onChange={(e) => setEmail(e.target.value)}
-									startIcon={<Zap className="w-4 h-4" />}
+									startIcon={<Mail className="w-4 h-4" />}
 								/>
 								<Input
 									label="Password"
@@ -251,13 +434,160 @@ function DesignSystem() {
 					</Card>
 				</Section>
 
-				{/* Cards Section */}
-				<Section id="cards" size="lg">
+				<Section id={formsId} size="lg">
+					<Heading level={2} size="3xl" className="mb-8">
+						Forms
+					</Heading>
+					<Text variant="muted" className="mb-6 max-w-2xl">
+						TanStack Form integration with Base UI components. Full validation
+						and state management.
+					</Text>
+
+					<div className="grid gap-6 md:grid-cols-2">
+						<Card>
+							<CardHeader>
+								<CardTitle>Contact Form</CardTitle>
+								<CardDescription>Complete form with validation</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<Form
+									defaultValues={{
+										email: "",
+										password: "",
+										role: "user",
+									}}
+									onSubmit={handleFormSubmit}
+								>
+									<FormField
+										name="email"
+										label="Email"
+										placeholder="you@example.com"
+										type="email"
+										required
+									/>
+									<FormField
+										name="password"
+										label="Password"
+										placeholder="Enter password"
+										type="password"
+										required
+									/>
+									<FormSelect
+										name="role"
+										label="Role"
+										options={[
+											{
+												value: "user",
+												label: "User",
+											},
+											{
+												value: "admin",
+												label: "Admin",
+											},
+											{
+												value: "editor",
+												label: "Editor",
+											},
+										]}
+										required
+									/>
+								</Form>
+							</CardContent>
+						</Card>
+
+						<Card>
+							<CardHeader>
+								<CardTitle>Inline Form</CardTitle>
+								<CardDescription>Compact layout for settings</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<Form
+									defaultValues={{
+										newsletter: "weekly",
+									}}
+									onSubmit={async (values) => {
+										console.log(values);
+									}}
+								>
+									<div className="space-y-5">
+										<FormSelect
+											name="newsletter"
+											label="Newsletter"
+											options={[
+												{
+													value: "daily",
+													label: "Daily Digest",
+												},
+												{
+													value: "weekly",
+													label: "Weekly Roundup",
+												},
+												{
+													value: "monthly",
+													label: "Monthly Update",
+												},
+											]}
+										/>
+										<div className="flex gap-3 pt-2">
+											<Button
+												size="sm"
+												variant="outline"
+												startIcon={<Trash2 className="w-4 h-4" />}
+											>
+												Delete
+											</Button>
+										</div>
+									</div>
+								</Form>
+							</CardContent>
+						</Card>
+					</div>
+				</Section>
+
+				<Section id={tablesId} size="lg" gridPattern>
+					<Heading level={2} size="3xl" className="mb-8">
+						Data Table
+					</Heading>
+					<Text variant="muted" className="mb-6 max-w-2xl">
+						TanStack Table with brutalist styling. Sharp grid lines, monospace
+						data, clear hierarchy.
+					</Text>
+
+					<Card>
+						<CardHeader>
+							<CardTitle>User Management</CardTitle>
+							<CardDescription>
+								Sortable user data with status indicators
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<DataTable
+								columns={userColumns}
+								data={sampleUsers}
+								sorting={[]}
+							/>
+						</CardContent>
+					</Card>
+				</Section>
+
+				<Section id={toastsId} size="lg">
+					<Heading level={2} size="3xl" className="mb-8">
+						Toast Notifications
+					</Heading>
+					<Text variant="muted" className="mb-6 max-w-2xl">
+						Non-blocking notifications with progress bars and brutalist styling.
+					</Text>
+
+					<ToastDemo />
+				</Section>
+
+				<Section id={cardsId} size="lg">
 					<Heading level={2} size="3xl" className="mb-8">
 						Cards
 					</Heading>
-					<Text variant="muted" className="mb-6">
-						Versatile card components with multiple variants and accent options.
+					<Text variant="muted" className="mb-6 max-w-2xl">
+						Versatile card components with multiple variants. From subtle to
+						dramatic.
 					</Text>
 
 					<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -265,14 +595,11 @@ function DesignSystem() {
 							<CardHeader>
 								<Caption size="xs">Default</Caption>
 								<CardTitle>Hoverable Card</CardTitle>
-								<CardDescription>
-									This card has hover effects enabled
-								</CardDescription>
+								<CardDescription>Translate and shadow on hover</CardDescription>
 							</CardHeader>
 							<CardContent>
-								<Text variant="muted">
-									Hover over this card to see the brutalist hover effect with
-									translate and shadow.
+								<Text variant="muted" size="sm">
+									Hover to see the brutalist hover effect.
 								</Text>
 							</CardContent>
 							<CardFooter>
@@ -283,14 +610,12 @@ function DesignSystem() {
 						<Card variant="elevated">
 							<CardHeader>
 								<Caption size="xs">Elevated</Caption>
-								<CardTitle>Elevated Card</CardTitle>
-								<CardDescription>
-									Card with brutal shadow effect
-								</CardDescription>
+								<CardTitle>Hard Shadow</CardTitle>
+								<CardDescription>4px offset shadow, no blur</CardDescription>
 							</CardHeader>
 							<CardContent>
-								<Text variant="muted">
-									Uses the brutal-shadow utility for depth without softness.
+								<Text variant="muted" size="sm">
+									Depth without softness.
 								</Text>
 							</CardContent>
 						</Card>
@@ -298,15 +623,12 @@ function DesignSystem() {
 						<Card variant="outlined">
 							<CardHeader>
 								<Caption size="xs">Outlined</Caption>
-								<CardTitle>Outlined Card</CardTitle>
-								<CardDescription>
-									Clean outlined style for minimal designs
-								</CardDescription>
+								<CardTitle>Minimal Card</CardTitle>
+								<CardDescription>Clean white border on dark</CardDescription>
 							</CardHeader>
 							<CardContent>
-								<Text variant="muted">
-									Perfect for overlay contexts where background shouldn't be too
-									heavy.
+								<Text variant="muted" size="sm">
+									Perfect for overlay contexts.
 								</Text>
 							</CardContent>
 						</Card>
@@ -314,45 +636,70 @@ function DesignSystem() {
 						<Card accent="left">
 							<CardHeader>
 								<Caption size="xs">Accent</Caption>
-								<CardTitle>Accent Card</CardTitle>
-								<CardDescription>With left accent border</CardDescription>
+								<CardTitle>Left Accent</CardTitle>
+								<CardDescription>Vertical accent border</CardDescription>
 							</CardHeader>
 							<CardContent>
-								<Text variant="muted">
-									Accent borders draw attention to important content.
+								<Text variant="muted" size="sm">
+									Draws attention to content.
 								</Text>
 							</CardContent>
 						</Card>
 
 						<Card variant="glitch" clickable>
 							<CardHeader>
-								<Caption size="xs">Glitch</Caption>
-								<CardTitle>Glitch Effect</CardTitle>
-								<CardDescription>Animated glitch variant</CardDescription>
+								<Caption size="xs" className="text-primary">
+									Glitch
+								</Caption>
+								<CardTitle>RGB Shift Effect</CardTitle>
+								<CardDescription>Cyberpunk glitch animation</CardDescription>
 							</CardHeader>
 							<CardContent>
-								<Text variant="muted">
-									Glitch effect for cyberpunk or tech-focused designs.
+								<Text variant="muted" size="sm">
+									Animated RGB split on hover.
 								</Text>
+							</CardContent>
+						</Card>
+
+						<Card>
+							<CardHeader>
+								<Caption size="xs">Interactive</Caption>
+								<CardTitle>Action Card</CardTitle>
+								<CardDescription>With action buttons</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<Text variant="muted" size="sm" className="mb-4">
+									Combine cards with buttons.
+								</Text>
+								<div className="flex gap-2">
+									<Button
+										size="sm"
+										startIcon={<Calendar className="w-4 h-4" />}
+									>
+										Schedule
+									</Button>
+									<Button size="sm" variant="outline">
+										Cancel
+									</Button>
+								</div>
 							</CardContent>
 						</Card>
 					</div>
 				</Section>
 
-				{/* Visual Components Section */}
-				<Section id="visual" size="lg" gridPattern>
+				<Section id={visualId} size="lg" gridPattern>
 					<Heading level={2} size="3xl" className="mb-8">
 						Visual Effects
 					</Heading>
-					<Text variant="muted" className="mb-6">
-						Components for visual flair and engagement.
+					<Text variant="muted" className="mb-6 max-w-2xl">
+						Animated components that add character without softness.
 					</Text>
 
 					<div className="grid gap-6 md:grid-cols-2">
 						<Card>
 							<CardHeader>
 								<CardTitle>Preloader</CardTitle>
-								<CardDescription>Animated loading indicator</CardDescription>
+								<CardDescription>Animated loading states</CardDescription>
 							</CardHeader>
 							<CardContent className="flex gap-8">
 								<Preloader size="sm" label="Loading" />
@@ -364,13 +711,11 @@ function DesignSystem() {
 						<Card>
 							<CardHeader>
 								<CardTitle>Marquee</CardTitle>
-								<CardDescription>
-									Infinite scrolling text banner
-								</CardDescription>
+								<CardDescription>Infinite scrolling text</CardDescription>
 							</CardHeader>
 							<CardContent>
-								<Marquee speed={30} repeat={2}>
-									<Text variant="accent" bold className="text-xl">
+								<Marquee speed={25} repeat={2}>
+									<Text variant="accent" bold className="text-lg">
 										IMPORTANT ANNOUNCEMENT • NEW FEATURES AVAILABLE • CHECK IT
 										OUT •
 									</Text>
@@ -380,38 +725,57 @@ function DesignSystem() {
 					</div>
 				</Section>
 
-				{/* Color Palette */}
-				<Section id="colors" size="lg">
+				<Section id={colorsId} size="lg">
 					<Heading level={2} size="3xl" className="mb-8">
 						Color Palette
 					</Heading>
-					<Text variant="muted" className="mb-6">
-						The brutalist color system built on high contrast and acid accents.
+					<Text variant="muted" className="mb-6 max-w-2xl">
+						High-contrast brutalist palette. Hot pink primary, electric
+						secondary, acid accents.
 					</Text>
 
 					<Card>
 						<CardContent className="p-0">
 							<div className="grid">
-								{/* Backgrounds */}
-								<div className="p-4 border-b border-light">
+								<div className="p-4 border-b-2 border-light">
 									<Caption size="xs" className="mb-3 block">
 										Backgrounds
 									</Caption>
 									<div className="flex gap-2 flex-wrap">
-										<div className="w-16 h-16 bg-void border border-light flex items-center justify-center">
+										<div className="w-16 h-16 bg-void border-2 border-light flex items-center justify-center">
 											<span className="text-[10px] text-muted">Void</span>
 										</div>
-										<div className="w-16 h-16 bg-concrete border border-light flex items-center justify-center">
-											<span className="text-[10px] text-muted">Concrete</span>
-										</div>
-										<div className="w-16 h-16 bg-dark border border-light flex items-center justify-center">
+										<div className="w-16 h-16 bg-dark border-2 border-light flex items-center justify-center">
 											<span className="text-[10px] text-muted">Dark</span>
+										</div>
+										<div className="w-16 h-16 bg-surface border-2 border-light flex items-center justify-center">
+											<span className="text-[10px] text-muted">Surface</span>
+										</div>
+										<div className="w-16 h-16 bg-concrete border-2 border-light flex items-center justify-center">
+											<span className="text-[10px] text-muted">Concrete</span>
 										</div>
 									</div>
 								</div>
 
-								{/* Accents */}
-								<div className="p-4 border-b border-light">
+								<div className="p-4 border-b-2 border-light">
+									<Caption size="xs" className="mb-3 block">
+										Primary / Secondary
+									</Caption>
+									<div className="flex gap-2 flex-wrap">
+										<div className="w-16 h-16 bg-primary flex items-center justify-center">
+											<span className="text-[10px] text-white font-bold">
+												Primary
+											</span>
+										</div>
+										<div className="w-16 h-16 bg-secondary flex items-center justify-center">
+											<span className="text-[10px] text-void font-bold">
+												Secondary
+											</span>
+										</div>
+									</div>
+								</div>
+
+								<div className="p-4 border-b-2 border-light">
 									<Caption size="xs" className="mb-3 block">
 										Accents
 									</Caption>
@@ -421,20 +785,19 @@ function DesignSystem() {
 												Acid
 											</span>
 										</div>
-										<div className="w-16 h-16 bg-electric flex items-center justify-center">
-											<span className="text-[10px] text-void font-bold">
-												Electric
+										<div className="w-16 h-16 bg-neon flex items-center justify-center">
+											<span className="text-[10px] text-white font-bold">
+												Neon
 											</span>
 										</div>
-										<div className="w-16 h-16 bg-neon flex items-center justify-center">
+										<div className="w-16 h-16 bg-amber flex items-center justify-center">
 											<span className="text-[10px] text-void font-bold">
-												Neon
+												Amber
 											</span>
 										</div>
 									</div>
 								</div>
 
-								{/* Semantic */}
 								<div className="p-4">
 									<Caption size="xs" className="mb-3 block">
 										Semantic
@@ -451,7 +814,7 @@ function DesignSystem() {
 											</span>
 										</div>
 										<div className="w-16 h-16 bg-error flex items-center justify-center">
-											<span className="text-[10px] text-void font-bold">
+											<span className="text-[10px] text-white font-bold">
 												Error
 											</span>
 										</div>
@@ -468,8 +831,7 @@ function DesignSystem() {
 				</Section>
 			</main>
 
-			{/* Footer */}
-			<footer className="border-t-2 border-light bg-concrete py-8 mt-16">
+			<footer className="border-t-2 border-light bg-surface py-8 mt-16">
 				<div className="max-w-7xl mx-auto px-6 text-center">
 					<Text variant="muted" size="sm">
 						Built with the Brutalist Design System

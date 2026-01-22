@@ -2,28 +2,23 @@ import * as React from "react";
 import { cn } from "@/lib/cn";
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-	/** Card visual variant */
 	variant?: "default" | "elevated" | "outlined" | "glitch";
-	/** Card size preset */
 	size?: "sm" | "md" | "lg";
-	/** Whether the card should have hover effects */
 	hoverable?: boolean;
-	/** Whether the card is clickable */
 	clickable?: boolean;
-	/** Optional decorative accent */
 	accent?: "top" | "left" | "corner" | "none";
 }
 
 const cardStyles = {
 	base: `
-     bg-concrete border-2 border-light
-     transition-all duration-300
-   `,
+      bg-concrete border-2 border-light
+      transition-all duration-300
+    `,
 	variants: {
 		default: "",
 		elevated: "brutal-shadow",
 		outlined: "border-white bg-transparent",
-		glitch: "border-acid animate-glitch",
+		glitch: "glitch-card",
 	},
 	sizes: {
 		sm: "p-4",
@@ -31,9 +26,9 @@ const cardStyles = {
 		lg: "p-8",
 	},
 	hoverable: `
-     hover:border-acid hover:translate-x-[-2px] hover:translate-y-[-2px]
-     hover:shadow-[4px_4px_0_var(--color-acid)]
-   `,
+      hover:border-acid hover:translate-x-[-2px] hover:translate-y-[-2px]
+      hover:shadow-[4px_4px_0_var(--color-acid)]
+    `,
 	clickable: "cursor-pointer",
 	accents: {
 		top: "before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-1 before:bg-acid",
@@ -58,21 +53,59 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
 		},
 		forwardedRef,
 	) => {
+		const [isHovered, setIsHovered] = React.useState(false);
+		const mountAnimationRef = React.useRef<HTMLDivElement>(null);
+
+		React.useEffect(() => {
+			if (variant === "glitch" && mountAnimationRef.current) {
+				const el = mountAnimationRef.current;
+				el.style.animation = "none";
+				requestAnimationFrame(() => {
+					el.style.animation = "glitch-mount 500ms ease-out forwards";
+				});
+			}
+		}, [variant]);
+
 		return (
 			<div
 				ref={forwardedRef}
 				className={cn(
 					"relative",
 					cardStyles.base,
-					cardStyles.variants[variant],
+					variant === "glitch"
+						? cardStyles.variants.glitch
+						: cardStyles.variants[variant],
 					cardStyles.sizes[size],
 					hoverable && cardStyles.hoverable,
 					clickable && cardStyles.clickable,
 					cardStyles.accents[accent],
 					className,
 				)}
+				onMouseEnter={() => variant === "glitch" && setIsHovered(true)}
+				onMouseLeave={() => variant === "glitch" && setIsHovered(false)}
 				{...props}
 			>
+				{variant === "glitch" && (
+					<div
+						ref={mountAnimationRef}
+						className={cn(
+							"absolute inset-0 pointer-events-none overflow-hidden",
+							isHovered && "animate-glitch-1",
+						)}
+					>
+						<div className="glitch-layer-1" />
+					</div>
+				)}
+				{variant === "glitch" && (
+					<div
+						className={cn(
+							"absolute inset-0 pointer-events-none overflow-hidden",
+							isHovered && "animate-glitch-2",
+						)}
+					>
+						<div className="glitch-layer-2" />
+					</div>
+				)}
 				{children}
 			</div>
 		);

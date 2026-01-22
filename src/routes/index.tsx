@@ -1,39 +1,35 @@
 import { createFileRoute } from "@tanstack/react-router";
-import logo from "../logo.svg";
+import { Heading, Section, Text } from "@/components";
 
 export const Route = createFileRoute("/")({
-	component: App,
+	component: HomePage,
 });
 
-function App() {
+function HomePage() {
 	return (
-		<div className="text-center">
-			<header className="min-h-screen flex flex-col items-center justify-center bg-[#282c34] text-white text-[calc(10px+2vmin)]">
-				<img
-					src={logo}
-					className="h-[40vmin] pointer-events-none animate-[spin_20s_linear_infinite]"
-					alt="logo"
-				/>
-				<p>
-					Edit <code>src/routes/index.tsx</code> and save to reload.
-				</p>
-				<a
-					className="text-[#61dafb] hover:underline"
-					href="https://reactjs.org"
-					target="_blank"
-					rel="noopener noreferrer"
+		<Section
+			size="full"
+			className="min-h-screen flex flex-col items-center justify-center bg-void"
+		>
+			<div className="text-center max-w-2xl px-6">
+				<Heading level={1} size="5xl" variant="mono" accent className="mb-6">
+					MINIMAX DEMO
+				</Heading>
+				<Text variant="muted" size="lg" className="mb-8">
+					A TanStack React Router application with a custom brutalist design
+					system.
+				</Text>
+				<Text
+					variant="accent"
+					bold
+					size="sm"
+					className="font-mono uppercase tracking-widest"
 				>
-					Learn React
-				</a>
-				<a
-					className="text-[#61dafb] hover:underline"
-					href="https://tanstack.com"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Learn TanStack
-				</a>
-			</header>
-		</div>
+					React 19.2 • TanStack Router • Tailwind CSS v4
+				</Text>
+			</div>
+		</Section>
 	);
 }
+
+export default HomePage;
